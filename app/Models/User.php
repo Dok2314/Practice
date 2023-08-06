@@ -8,6 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Nuwave\Lighthouse\Execution\ResolveInfo;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -42,4 +48,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'user_id', 'id');
+    }
+
+    public function statistics(mixed $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Builder
+    {
+        return DB::table('users')->where('id', '>', 10);
+    }
+
+    public function scopeLimit(EloquentBuilder $query)
+    {
+        return $query->where('id', '>', 10);
+    }
 }

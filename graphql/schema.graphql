@@ -12,30 +12,79 @@ type Query {
       email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
     ): User @find
 
+    usersAll(
+      name: String @where(operator: "like")
+    ): [User!]! @all
+
     "List multiple users."
     users(
-      "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
-      name: String @where(operator: "like")
-    ): [User!]! @paginate(defaultCount: 10)
+        name: String @where(operator: "like"),
+        orderBy: _ @orderBy(columns: ["id", "name", "created_at"])
+    ): [User!]! @paginate(defaultCount: 5)
+
+    post(
+        "Search by primary key."
+        id: ID @eq
+
+        "Search by email address."
+        title: String @eq
+    ): Post @find
+
+    posts(
+        "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+        title: String @where(operator: "like")
+    ): [Post!]! @paginate(defaultCount: 5)
+
+    tickets(
+        "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+        name: String @where(operator: "like")
+    ): [Ticket!]! @paginate(defaultCount: 5)
+
+    ticket(
+        id: ID @eq
+    ): Ticket @find
+
+    events(
+        name: String @where(operator: "like")
+    ): [Event!]! @paginate(defaultCount: 5)
+
+    event(
+        id: ID @eq
+
+        name: String @eq
+    ): Event @find
 }
 
-"Account of a person who utilizes this application."
 type User {
-    "Unique primary key."
     id: ID!
-
-    "Non-unique name."
     name: String!
-
-    "Unique email address."
     email: String!
-
-    "When the email was verified."
+    posts: [Post!]!
+    tickets: [Ticket!]
     email_verified_at: DateTime
-
-    "When the account was created."
     created_at: DateTime!
-
-    "When the account was last updated."
     updated_at: DateTime!
+}
+
+type Post {
+    id: ID!
+    title: String!
+    slug: String!
+    user: User!
+    description: String!
+    published: Boolean
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Ticket {
+    id: ID!
+    events: [Event!]!
+    users: [User!]!
+}
+
+type Event {
+    id: ID!
+    name: String
+    date: DateTime
 }
