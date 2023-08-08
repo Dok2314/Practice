@@ -18,14 +18,14 @@ represent free-form human-readable text.
 """
 scalar String
 
+"The `Boolean` scalar type represents `true` or `false`."
+scalar Boolean
+
 """
 The `Int` scalar type represents non-fractional signed whole numeric
 values. Int can represent values between -(2^31) and 2^31 - 1. 
 """
 scalar Int
-
-"The `Boolean` scalar type represents `true` or `false`."
-scalar Boolean
 
 "Information about pagination using a fully featured paginator."
 type PaginatorInfo {
@@ -61,6 +61,91 @@ type UserPaginator {
 
   "A list of User items."
   data: [User!]!
+}
+
+"A paginated list of Post items."
+type PostPaginator {
+  "Pagination information about the list of items."
+  paginatorInfo: PaginatorInfo!
+
+  "A list of Post items."
+  data: [Post!]!
+}
+
+"A paginated list of Ticket items."
+type TicketPaginator {
+  "Pagination information about the list of items."
+  paginatorInfo: PaginatorInfo!
+
+  "A list of Ticket items."
+  data: [Ticket!]!
+}
+
+"A paginated list of Event items."
+type EventPaginator {
+  "Pagination information about the list of items."
+  paginatorInfo: PaginatorInfo!
+
+  "A list of Event items."
+  data: [Event!]!
+}
+
+"Allowed column names for Query.users.orderBy."
+enum QueryUsersOrderByColumn {
+  ID
+  NAME
+  CREATED_AT
+}
+
+"Order by clause for Query.users.orderBy."
+input QueryUsersOrderByOrderByClause {
+  "The column that is used for ordering."
+  column: QueryUsersOrderByColumn!
+
+  "The direction that is used for ordering."
+  order: SortOrder!
+}
+
+"Allowed column names for Query.users.where."
+enum QueryUsersWhereColumn {
+  NAME
+  EMAIL
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `users`."
+input QueryUsersWhereWhereConditions {
+  "The column that is used for the condition."
+  column: QueryUsersWhereColumn
+
+  "The operator that is used for the condition."
+  operator: SQLOperator = EQ
+
+  "The value that is used for the condition."
+  value: Mixed
+
+  "A set of conditions that requires all conditions to match."
+  AND: [QueryUsersWhereWhereConditions!]
+
+  "A set of conditions that requires at least one condition to match."
+  OR: [QueryUsersWhereWhereConditions!]
+
+  "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+  HAS: QueryUsersWhereWhereConditionsRelation
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `users`."
+input QueryUsersWhereWhereConditionsRelation {
+  "The relation that is checked."
+  relation: String!
+
+  "The comparison operator to test against the amount."
+  operator: SQLOperator = GTE
+
+  "The amount to test."
+  amount: Int = 1
+
+  "Additional condition logic."
+  condition: QueryUsersWhereWhereConditions
 }
 
 "Directions for ordering a list of records."
@@ -116,6 +201,94 @@ enum Trashed {
   "Only return non-trashed results."
   WITHOUT
 }
+
+"Dynamic WHERE conditions for queries."
+input WhereConditions {
+  "The column that is used for the condition."
+  column: String
+
+  "The operator that is used for the condition."
+  operator: SQLOperator = EQ
+
+  "The value that is used for the condition."
+  value: Mixed
+
+  "A set of conditions that requires all conditions to match."
+  AND: [WhereConditions!]
+
+  "A set of conditions that requires at least one condition to match."
+  OR: [WhereConditions!]
+
+  "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+  HAS: WhereConditionsRelation
+}
+
+"Dynamic HAS conditions for WHERE condition queries."
+input WhereConditionsRelation {
+  "The relation that is checked."
+  relation: String!
+
+  "The comparison operator to test against the amount."
+  operator: SQLOperator = GTE
+
+  "The amount to test."
+  amount: Int = 1
+
+  "Additional condition logic."
+  condition: WhereConditions
+}
+
+"The available SQL operators that are used to filter query results."
+enum SQLOperator {
+  "Equal operator (`=`)"
+  EQ
+
+  "Not equal operator (`!=`)"
+  NEQ
+
+  "Greater than operator (`>`)"
+  GT
+
+  "Greater than or equal operator (`>=`)"
+  GTE
+
+  "Less than operator (`<`)"
+  LT
+
+  "Less than or equal operator (`<=`)"
+  LTE
+
+  "Simple pattern matching (`LIKE`)"
+  LIKE
+
+  "Negation of simple pattern matching (`NOT LIKE`)"
+  NOT_LIKE
+
+  "Whether a value is within a set of values (`IN`)"
+  IN
+
+  "Whether a value is not within a set of values (`NOT IN`)"
+  NOT_IN
+
+  "Whether a value is within a range of values (`BETWEEN`)"
+  BETWEEN
+
+  "Whether a value is not within a range of values (`NOT BETWEEN`)"
+  NOT_BETWEEN
+
+  "Whether a value is null (`IS NULL`)"
+  IS_NULL
+
+  "Whether a value is not null (`IS NOT NULL`)"
+  IS_NOT_NULL
+}
+
+"""
+Loose type that allows any value. Be careful when passing in large `Int` or `Float` literals,
+as they may not be parsed correctly on the server side. Use `String` literals if you are
+dealing with really large numbers to be on the safe side.
+"""
+scalar Mixed
 
 "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations."
 type __Schema {

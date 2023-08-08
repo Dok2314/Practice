@@ -1,6 +1,38 @@
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+type Mutation {
+    createUser(input: CreateUserInput! @spread): User
+    updateUser(id: ID!, name: String, email: String, password: String): User
+    deleteUser(id: ID!): DeleteResponse
+
+    "Upload a file that is publicly available."
+    upload(file: Upload!): Image
+}
+
+type Image {
+    id: ID!
+    name: String!
+    url: String!
+    user: User
+    created_at: String
+    updated_at: String
+}
+
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+type DeleteResponse {
+    status: String!
+    message: String!
+}
+
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     "Find a single user by an identifying attribute."
@@ -19,7 +51,8 @@ type Query {
     "List multiple users."
     users(
         name: String @where(operator: "like"),
-        orderBy: _ @orderBy(columns: ["id", "name", "created_at"])
+        orderBy: _ @orderBy(columns: ["id", "name", "created_at"]),
+        where: _ @whereConditions(columns: ["id", "name", "email"])
     ): [User!]! @paginate(defaultCount: 5)
 
     post(
