@@ -17,8 +17,7 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
-            'event_id' => rand(1, 50),
-            'user_id' => rand(1, 50)
+            'event_id' => rand(1, 50)
         ];
     }
 }

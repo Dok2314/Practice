@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function tickets()
     {
-        return $this->hasMany(Ticket::class, 'user_id', 'id');
+        return $this->belongsToMany(Ticket::class, 'user_ticket');
     }
 
     public function statistics(mixed $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Builder

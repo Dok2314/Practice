@@ -9,6 +9,10 @@ type Mutation {
     updateUser(id: ID!, name: String, email: String, password: String): User
     deleteUser(id: ID!): DeleteResponse
 
+    syncTicket(id: ID!,
+        ticket_id: [Int!]! @rulesForArray(apply: ["exists:tickets,id", "unique:user_ticket,ticket_id"])
+    ): User!
+
     "Upload a file that is publicly available."
     upload(file: Upload!): Image
 }
@@ -23,9 +27,9 @@ type Image {
 }
 
 input CreateUserInput {
-    name: String!
-    email: String!
-    password: String!
+    name: String! @rules(apply: ["required", "string", "min:1"])
+    email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    password: String! @rules(apply: ["required", "min:6"])
 }
 
 type DeleteResponse {
