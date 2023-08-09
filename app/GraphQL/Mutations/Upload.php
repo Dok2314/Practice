@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\Image;
+use App\Models\User;
 use GraphQL\Error\Error;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -32,8 +33,6 @@ final class Upload
             'name' => $file->getFilename(),
             'hash' => $file->hashName()
         ]);
-
-//        $image->user_id =
 
         $image->save();
 
