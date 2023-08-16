@@ -32,7 +32,7 @@
             @endif
 
             <div class="row">
-                <a href="" style="color: white;"><button>Авторизироваться</button></a>
+                <a href="{{ route('redirect.oauth') }}" style="color: white;"><button>Авторизироваться</button></a>
             </div>
 
 {{--            <div class="max-w-7xl mx-auto p-6 lg:p-8">--}}

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\GoogleOAuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('oauth/redirect', [GoogleOAuthController::class, 'redirectOnOAuthServer'])->name('redirect.oauth');
+Route::get('oauth/code', [GoogleOAuthController::class, 'code'])->name('redirect.code');
