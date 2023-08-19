@@ -20,7 +20,7 @@ class GoogleOAuthService
 
         $queryParams = [
             "client_id" => self::$clientId,
-            "redirect_url" => $redirectUrl,
+            "redirect_uri" => $redirectUrl,
             "response_type" => "code",
             "scope" => $scope,
             "code_challenge" => $codeChallange,
@@ -29,7 +29,6 @@ class GoogleOAuthService
 
         $query_string = http_build_query($queryParams);
 
-        dd($endpoint . "?" . $query_string);
         return $endpoint . "?" . $query_string;
     }
 

@@ -11,9 +11,9 @@ use Illuminate\Support\Str;
 class GoogleOAuthController extends Controller
 {
     private string $scope = "https://www.googleapis.com/auth/youtube";
-    public function redirectOnOAuthServer()
+    public function redirectOnOAuthServer(Request $request)
     {
-        $redirectUrl = route('redirect.code');
+        $redirectUrl = route('redirect.code', ['code' => $request->get('code')]);
         $codeVerifier = Str::random();
         $codeChellange = hash('sha256', $codeVerifier);;
 
@@ -24,12 +24,12 @@ class GoogleOAuthController extends Controller
         return Redirect::to($url);
     }
 
-    public function code(Request $request)
+        public function code($code)
     {
         $codeVerifier = Session::get("codeVerifier");
-        $redirectUrl = $request->get('code');
+        $redirectUrl = route('redirect.code', ['code' => $code]);
 
-        $tokenResult = GoogleOAuthService::exchangeCodeOnToken($request->get('code'), $codeVerifier, $redirectUrl);
+        $tokenResult = GoogleOAuthService::exchangeCodeOnToken($code, $codeVerifier, $redirectUrl);
 
         return $tokenResult;
     }
