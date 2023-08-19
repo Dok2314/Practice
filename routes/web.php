@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleOAuthController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +15,10 @@ use App\Http\Controllers\GoogleOAuthController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [UserController::class, 'index']);
+
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{id}', [PostController::class, 'show']);
 
 Route::get('oauth/redirect', [GoogleOAuthController::class, 'redirectOnOAuthServer'])->name('redirect.oauth');
 Route::get('oauth/code', [GoogleOAuthController::class, 'code'])->name('redirect.code');

@@ -22,7 +22,8 @@ class PostFactory extends Factory
             'slug' => fake()->unique()->slug(),
             'description' => fake()->text(),
             'published' => rand(0, 1),
-            'user_id' => rand(1, 100)
+            'user_id' => rand(1, 100),
+            'likes' => rand(0, 1000)
         ];
     }
 }
