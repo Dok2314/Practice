@@ -29,6 +29,13 @@ class RedisTestCommand extends Command
      */
     public function handle()
     {
+        $before = microtime(true);
 
+        $posts = Post::factory(100000)->make();
+        Cache::put('posts:all', $posts);
+
+        $after = microtime(true);
+
+        dd($after - $before);
     }
 }
